@@ -41,6 +41,8 @@ BITA = 4
 BITG = 32
 TOTAL_BATCH_SIZE = 128
 BATCH_SIZE = None
+NUM_PREFETCH_THREADS=2
+shuffle_queue_buffer_size = 100
 
 N_CONTEXT_FRMS = 20
 N_MFCCS = 20
@@ -61,7 +63,7 @@ class Model(ModelDesc):
         def new_get_variable(v):
             name = v.op.name
             # don't binarize first and last layer
-            if not name.endswith('W') or 'conv0' in name or 'fct' in name:
+            if not name.endswith('W') or 'fc0' in name or 'fct' in name:
                 return v
             else:
                 logger.info("Binarizing weight {}".format(v.op.name))
@@ -117,70 +119,24 @@ class Model(ModelDesc):
         return tf.train.AdamOptimizer(lr, epsilon=1e-5)
 
 
-def get_data(dataset_name):
-    isTrain = dataset_name == 'train'
-    ds = Rsr2015(args.data, dataset_name, shuffle=isTrain)
-
-    meta = dataset.ILSVRCMeta()
-    pp_mean = meta.get_per_pixel_mean()
-    pp_mean_224 = pp_mean[16:-16, 16:-16, :]
-
-    if isTrain:
-        class Resize(imgaug.ImageAugmentor):
-            def __init__(self):
-                self._init(locals())
-
-            def _augment(self, img, _):
-                h, w = img.shape[:2]
-                size = 224
-                scale = self.rng.randint(size, 308) * 1.0 / min(h, w)
-                scaleX = scale * self.rng.uniform(0.85, 1.15)
-                scaleY = scale * self.rng.uniform(0.85, 1.15)
-                desSize = map(int, (max(size, min(w, scaleX * w)),
-                                    max(size, min(h, scaleY * h))))
-                dst = cv2.resize(img, tuple(desSize),
-                                 interpolation=cv2.INTER_CUBIC)
-                return dst
-
-        augmentors = [
-            Resize(),
-            imgaug.Rotation(max_deg=10),
-            imgaug.RandomApplyAug(imgaug.GaussianBlur(3), 0.5),
-            imgaug.Brightness(30, True),
-            imgaug.Gamma(),
-            imgaug.Contrast((0.8, 1.2), True),
-            imgaug.RandomCrop((224, 224)),
-            imgaug.RandomApplyAug(imgaug.JpegNoise(), 0.8),
-            imgaug.RandomApplyAug(imgaug.GaussianDeform(
-                [(0.2, 0.2), (0.2, 0.8), (0.8, 0.8), (0.8, 0.2)],
-                (224, 224), 0.2, 3), 0.1),
-            imgaug.Flip(horiz=True),
-            imgaug.MapImage(lambda x: x - pp_mean_224),
-        ]
-    else:
-        def resize_func(im):
-            h, w = im.shape[:2]
-            scale = 256.0 / min(h, w)
-            desSize = map(int, (max(224, min(w, scale * w)),
-                                max(224, min(h, scale * h))))
-            im = cv2.resize(im, tuple(desSize), interpolation=cv2.INTER_CUBIC)
-            return im
-        augmentors = [
-            imgaug.MapImage(resize_func),
-            imgaug.CenterCrop((224, 224)),
-            imgaug.MapImage(lambda x: x - pp_mean_224),
-        ]
-    ds = AugmentImageComponent(ds, augmentors, copy=False)
+def get_data(partition):
+    isTrain = partition == 'train'
+    rsr_ds = Rsr2015(args.data, partition, shuffle=isTrain)
+    ds = LocallyShuffleData(rsr_ds, shuffle_queue_buffer_size, nr_reuse=1)
+    print(ds.size())
     ds = BatchData(ds, BATCH_SIZE, remainder=not isTrain)
-    if isTrain:
-        ds = PrefetchDataZMQ(ds, min(12, multiprocessing.cpu_count()))
+    ds = PrefetchDataZMQ(ds, min(NUM_PREFETCH_THREADS, multiprocessing.cpu_count()))
     return ds
 
 
 def get_config():
-    logger.auto_set_dir()
+    if args.output:
+        logger.set_logger_dir(args.output, action='d')
+    else:
+        logger.set_logger_dir('train_logs/', action='d')
     data_train = get_data('train')
-    data_test = get_data('val')
+    print("Number of examples in epoch:", data_train.size())
+    # data_test = get_data('val')
 
     return TrainConfig(
         dataflow=data_train,
@@ -188,19 +144,19 @@ def get_config():
             ModelSaver(),
             # HumanHyperParamSetter('learning_rate'),
             ScheduledHyperParamSetter(
-                'learning_rate', [(56, 2e-5), (64, 4e-6)]),
-            InferenceRunner(data_test,
-                            [ScalarStats('cost'),
-                             ClassificationError('wrong-top1', 'val-error-top1'),
-                             ClassificationError('wrong-top5', 'val-error-top5')])
+                'learning_rate', [(56, 2e-5), (64, 4e-6)])
+            # InferenceRunner(data_test,
+            #                 [ScalarStats('cost'),
+            #                  ClassificationError('wrong-top1', 'val-error-top1'),
+            #                  ClassificationError('wrong-top5', 'val-error-top5')])
         ],
         model=Model(),
-        steps_per_epoch=10000,
+        steps_per_epoch=data_train.size(),
         max_epoch=100,
     )
 
 
-def run_image(model, sess_init, inputs):
+def run_example(model, sess_init, inputs):
     pred_config = PredictConfig(
         model=model,
         session_init=sess_init,
@@ -208,49 +164,33 @@ def run_image(model, sess_init, inputs):
         output_names=['output']
     )
     predictor = OfflinePredictor(pred_config)
-    meta = dataset.ILSVRCMeta()
-    pp_mean = meta.get_per_pixel_mean()
-    pp_mean_224 = pp_mean[16:-16, 16:-16, :]
-    words = meta.get_synset_words_1000()
 
-    def resize_func(im):
-        h, w = im.shape[:2]
-        scale = 256.0 / min(h, w)
-        desSize = map(int, (max(224, min(w, scale * w)),
-                            max(224, min(h, scale * h))))
-        im = cv2.resize(im, tuple(desSize), interpolation=cv2.INTER_CUBIC)
-        return im
-    transformers = imgaug.AugmentorList([
-        imgaug.MapImage(resize_func),
-        imgaug.CenterCrop((224, 224)),
-        imgaug.MapImage(lambda x: x - pp_mean_224),
-    ])
     for f in inputs:
         assert os.path.isfile(f)
-        img = cv2.imread(f).astype('float32')
-        assert img is not None
-
-        img = transformers.augment(img)[np.newaxis, :, :, :]
-        outputs = predictor([img])[0]
+        utt_data = np.load(f)
+        outputs = predictor([utt])[0]
         prob = outputs[0]
         ret = prob.argsort()[-10:][::-1]
-
-        names = [words[i] for i in ret]
         print(f + ":")
-        print(list(zip(names, prob[ret])))
+        print(list(zip(ret, prob[ret])))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', help='the physical ids of GPUs to use')
     parser.add_argument('--load', help='load a checkpoint, or a npy (given as the pretrained model)')
-    parser.add_argument('--data', help='ILSVRC dataset dir')
+    parser.add_argument('--data', help='dataset dir', required=True)
     parser.add_argument('--dorefa',
                         help='number of bits for W,A,G, separated by comma', required=True)
-    parser.add_argument('--run', help='run on a list of images with the pretrained model', nargs='*')
+    parser.add_argument('--run', help='run on a list of examples with pretrained model', nargs='*')
+    parser.add_argument('--output', help='where to output logs')
+    parser.add_argument('--num_prefetch_threads', help='where to output logs')
     args = parser.parse_args()
 
     BITW, BITA, BITG = map(int, args.dorefa.split(','))
+
+    if args.num_prefetch_threads:
+
 
     if args.gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
@@ -260,13 +200,23 @@ if __name__ == '__main__':
         run_image(Model(), DictRestore(np.load(args.load, encoding='latin1').item()), args.run)
         sys.exit()
 
-    assert args.gpu is not None, "Need to specify a list of gpu for training!"
-    nr_tower = max(get_nr_gpu(), 1)
-    BATCH_SIZE = TOTAL_BATCH_SIZE // nr_tower
-    logger.info("Batch per tower: {}".format(BATCH_SIZE))
+    if args.gpu:
+        assert args.gpu is not None, "Need to specify a list of gpu for training!"
+        nr_tower = max(get_nr_gpu(), 1)
+        print(nr_tower)
+        BATCH_SIZE = TOTAL_BATCH_SIZE // nr_tower
+        logger.info("Using GPU training. Num towers: {} Batch per tower: {}".format(nr_tower, BATCH_SIZE))
+    else:
+        BATCH_SIZE = TOTAL_BATCH_SIZE
+        logger.info("Using CPU. Batch size: {}".format(BATCH_SIZE))
 
     config = get_config()
     if args.load:
         config.session_init = SaverRestore(args.load)
-    config.nr_tower = nr_tower
-    SyncMultiGPUTrainer(config).train()
+
+    if args.gpu:
+        config.nr_tower = nr_tower
+        SyncMultiGPUTrainer(config).train()
+    else:
+        QueueInputTrainer(config).train()
+
