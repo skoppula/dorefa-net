@@ -162,6 +162,7 @@ def get_data(partition, batch_size):
 
 def get_config(batch_size, n_gpus):
     logger.set_logger_dir(FLAGS.output, action='d')
+    logger.info("Outputting at: {}".format(FLAGS.output)
     data_train, num_egs_per_trn_epoch  = get_data('train', batch_size)
     logger.info("{} examples per train epoch".format(num_egs_per_trn_epoch))
 
