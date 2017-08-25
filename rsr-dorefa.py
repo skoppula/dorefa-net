@@ -76,7 +76,7 @@ class Model(ModelDesc):
                 InputDesc(tf.int32, [None], 'label')]
 
     def _build_graph(self, inputs):
-        image, label = inputs
+        input, label = inputs
 
         fw, fa, fg = get_dorefa(FLAGS.bit_w, FLAGS.bit_a, 32)
 
@@ -103,20 +103,16 @@ class Model(ModelDesc):
         with remap_variables(new_get_variable), \
                 argscope(BatchNorm, decay=0.9, epsilon=1e-4), \
                 argscope([Conv2D, FullyConnected], use_bias=False, nl=tf.identity):
-            logits = (LinearWrap(image)
-                      .FullyConnected('fc0', 256)
+            curr_layer = LinearWrap(input)
+            for i in range(FLAGS.n_layers):
+                curr_layer = (curr_layer
+                            .FullyConnected('fc' + str(i), FLAGS.state_size)
+                            .apply(fg)
+                            .BatchNorm('bn_fc' + str(i))
+                            .apply(activate))
+            logits = (curr_layer.FullyConnected('fc' + str(FLAGS.n_layers), 256)
                       .apply(fg)
-                      .BatchNorm('bn_fc0')
-                      .apply(activate)
-
-                      .FullyConnected('fc1', 256)
-                      .apply(fg)
-                      .BatchNorm('bn_fc1')
-                      .apply(activate)
-
-                      .FullyConnected('fc2', 256)
-                      .apply(fg)
-                      .BatchNorm('bnfc2')
+                      .BatchNorm('bnfc' + str(FLAGS.n_layers))
                       .apply(nonlin)
                       .FullyConnected('fct', 256, use_bias=True)())
 
@@ -144,7 +140,7 @@ class Model(ModelDesc):
         add_moving_summary(cost, wd_cost, self.cost)
 
     def _get_optimizer(self):
-        lr = get_scalar_var('learning_rate', 1e-4, summary=True)
+        lr = get_scalar_var('learning_rate', FLAGS.learning_rate, summary=True)
         return tf.train.AdamOptimizer(lr, epsilon=1e-5)
 
 
@@ -162,6 +158,7 @@ def get_data(partition, batch_size):
 
 def get_config(batch_size, n_gpus):
     logger.set_logger_dir(FLAGS.output, action='d')
+    logger.info("Outputting at: {}".format(FLAGS.output))
     data_train, num_egs_per_trn_epoch  = get_data('train', batch_size)
     logger.info("{} examples per train epoch".format(num_egs_per_trn_epoch))
 
