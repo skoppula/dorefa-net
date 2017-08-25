@@ -36,29 +36,49 @@ To Run Pretrained Model:
     ./alexnet-dorefa.py --load alexnet-126.npy --run a.jpg --dorefa 1,2,6
 """
 
-BITW = 4
-BITA = 4
-BITG = 32
-TOTAL_BATCH_SIZE = 128
-BATCH_SIZE = None
-NUM_PREFETCH_THREADS=2
-shuffle_queue_buffer_size = 100
+flags = tf.app.flags
 
-n_layers=4
-state_size=256
+flags.DEFINE_integer('bit_w', 4, 'Bitwidth of weights')
+flags.DEFINE_integer('bit_a', 4, 'Bitwidth of gradients')
 
-N_CONTEXT_FRMS = 20
-N_MFCCS = 20
+flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
+flags.DEFINE_integer('num_epochs', 100, 'Number of steps to run trainer.')
+flags.DEFINE_integer('total_batch_size', 128, 'Total batch size across all GPUs')
+
+flags.DEFINE_integer('n_layers', 4, 'Number of units in hidden layer 2.')
+flags.DEFINE_integer('state_size', 256, 'Number of units in hidden layer 2.')
+flags.DEFINE_integer('num_prefetch_threads', 2, 'Number of prefetch_threads')
+
+flags.DEFINE_integer('n_context_frms', 20, 'Number of context frames')
+flags.DEFINE_integer('n_mfccs', 20, 'Number of MFCC frames')
+
+flags.DEFINE_integer('shuffle_queue_buffer_size', 100, 'Size of shuffle queue')
+
+flags.DEFINE_string('data', './data/', 'Directory with train.idx/val.idx/test.idx')
+flags.DEFINE_string('output', './train_logs/', 'Directory with train.idx/val.idx/test.idx')
+flags.DEFINE_string('load', None, 'File with load checkpoint')
+
+flags.DEFINE_string('inference_input', None, 'Files to run inference')
+
+flags.DEFINE_string('gpu', None, 'IDs of GPUs, comma seperated: e.g. 2,3')
+
+FLAGS = flags.FLAGS
+
+def print_all_tf_vars():
+    logger.info("Model variables:")
+    for var in tf.global_variables():
+        logger.info("\t{}, {}".format(var.name, var.shape))
+
 
 class Model(ModelDesc):
     def _get_inputs(self):
-        return [InputDesc(tf.float32, [None, N_CONTEXT_FRMS*N_MFCCS], 'input'),
+        return [InputDesc(tf.float32, [None, FLAGS.n_context_frms*FLAGS.n_mfccs], 'input'),
                 InputDesc(tf.int32, [None], 'label')]
 
     def _build_graph(self, inputs):
         image, label = inputs
 
-        fw, fa, fg = get_dorefa(BITW, BITA, BITG)
+        fw, fa, fg = get_dorefa(FLAGS.bit_w, FLAGS.bit_a, 32)
 
         old_get_variable = tf.get_variable
 
@@ -73,7 +93,7 @@ class Model(ModelDesc):
                 return fw(v)
 
         def nonlin(x):
-            if BITA == 32:
+            if FLAGS.bit_a == 32:
                 return tf.nn.relu(x)    # still use relu for 32bit cases
             return tf.clip_by_value(x, 0.0, 1.0)
 
@@ -99,6 +119,8 @@ class Model(ModelDesc):
                       .BatchNorm('bnfc2')
                       .apply(nonlin)
                       .FullyConnected('fct', 256, use_bias=True)())
+
+        print_all_tf_vars()
 
         prob = tf.nn.softmax(logits, name='output')
 
@@ -126,28 +148,26 @@ class Model(ModelDesc):
         return tf.train.AdamOptimizer(lr, epsilon=1e-5)
 
 
-def get_data(partition):
+def get_data(partition, batch_size):
     isTrain = partition == 'train'
-    rsr_ds = Rsr2015(args.data, partition, shuffle=isTrain)
+    rsr_ds = Rsr2015(FLAGS.data, partition, shuffle=isTrain)
     if isTrain:
-        ds = LocallyShuffleData(rsr_ds, shuffle_queue_buffer_size, nr_reuse=1)
-        ds = BatchData(ds, BATCH_SIZE, remainder=not isTrain)
-        ds = PrefetchDataZMQ(ds, min(NUM_PREFETCH_THREADS, multiprocessing.cpu_count()))
+        ds = LocallyShuffleData(rsr_ds, FLAGS.shuffle_queue_buffer_size, nr_reuse=1)
+        ds = BatchData(ds, batch_size, remainder=not isTrain)
+        ds = PrefetchDataZMQ(ds, min(FLAGS.num_prefetch_threads, multiprocessing.cpu_count()))
         return ds, rsr_ds.size()
     else:
         return rsr_ds, rsr_ds.size()
 
 
-def get_config():
-    if args.output:
-        logger.set_logger_dir(args.output, action='d')
-    else:
-        logger.set_logger_dir('train_logs/', action='d')
-    data_train, num_egs_per_trn_epoch  = get_data('train')
+def get_config(batch_size, n_gpus):
+    logger.set_logger_dir(FLAGS.output, action='d')
+    data_train, num_egs_per_trn_epoch  = get_data('train', batch_size)
     logger.info("{} examples per train epoch".format(num_egs_per_trn_epoch))
 
-    data_test, num_egs_per_val_epoch = get_data('val')
+    data_test, num_egs_per_val_epoch = get_data('val', None)
     logger.info("{} examples per val epoch".format(num_egs_per_val_epoch))
+
 
     return TrainConfig(
         dataflow=data_train,
@@ -159,7 +179,7 @@ def get_config():
             InferenceRunner(data_test, [ScalarStats('cost'), ClassificationError('wrong-top1', 'val-error-top1'), ClassificationError('utt-wrong', 'val-utt-error')])
         ],
         model=Model(),
-        steps_per_epoch=num_egs_per_trn_epoch/TOTAL_BATCH_SIZE,
+        steps_per_epoch=num_egs_per_trn_epoch/(batch_size*n_gpus),
         max_epoch=100,
     )
 
@@ -183,48 +203,34 @@ def run_example(model, sess_init, inputs):
         print(list(zip(ret, prob[ret])))
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--gpu', help='the physical ids of GPUs to use')
-    parser.add_argument('--load', help='load a checkpoint, or a npy (given as the pretrained model)')
-    parser.add_argument('--data', help='dataset dir', required=True)
-    parser.add_argument('--dorefa',
-                        help='number of bits for W,A separated by comma', required=True)
-    parser.add_argument('--run', help='run on a list of examples with pretrained model', nargs='*')
-    parser.add_argument('--output', help='where to output logs')
-    parser.add_argument('--num_prefetch_threads', help='where to output logs')
-    args = parser.parse_args()
+def main(_):
 
-    BITW, BITA = map(int, args.dorefa.split(','))
-
-    if args.num_prefetch_threads:
-        NUM_PREFETCH_THREADS=int(args.num_prefetch_threads)
-
-    if args.gpu:
-        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
-
-    if args.run:
-        assert args.load.endswith('.npy')
-        run_example(Model(), DictRestore(np.load(args.load, encoding='latin1').item()), args.run)
+    if FLAGS.inference_input:
+        assert FLAGS.load.endswith('.npy')
+        run_example(Model(), DictRestore(np.load(FLAGS.load, encoding='latin1').item()), FLAGS.inference_input)
         sys.exit()
 
-    if args.gpu:
-        assert args.gpu is not None, "Need to specify a list of gpu for training!"
+    if FLAGS.gpu:
+        os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
         nr_tower = max(get_nr_gpu(), 1)
-        BATCH_SIZE = TOTAL_BATCH_SIZE // nr_tower
+        batch_size_per_gpu = FLAGS.total_batch_size // nr_tower
     else:
-        BATCH_SIZE = TOTAL_BATCH_SIZE
+        nr_tower = 1
+        batch_size_per_gpu = FLAGS.total_batch_size
 
-    config = get_config()
-    if args.load:
-        config.session_init = SaverRestore(args.load)
-    logger.info("Using {} prefetch threads".format(NUM_PREFETCH_THREADS))
+    config = get_config(batch_size_per_gpu, nr_tower)
+    if FLAGS.load:
+        config.session_init = SaverRestore(FLAGS.load)
+    logger.info("Using {} prefetch threads".format(FLAGS.num_prefetch_threads))
 
-    if args.gpu:
-        logger.info("Using GPU training. Num towers: {} Batch per tower: {}".format(nr_tower, BATCH_SIZE))
+    if FLAGS.gpu:
+        logger.info("Using GPU training. Num towers: {} Batch per tower: {}".format(nr_tower, batch_size_per_gpu))
         config.nr_tower = nr_tower
         SyncMultiGPUTrainer(config).train()
     else:
-        logger.info("Using CPU. Batch size: {}".format(BATCH_SIZE))
+        logger.info("Using CPU. Batch size: {}".format(batch_size_per_gpu))
         QueueInputTrainer(config).train()
+
+if __name__ == "__main__":
+    tf.app.run()
 

@@ -82,6 +82,7 @@ class Rsr2015(RsrMfccFiles):
             self.num_examples_in_epoch = sum([abs(x[0] - context) for x in self.shapes])
         else:
             self.num_examples_in_epoch = len(self.shapes)
+        print(base_dir, self.num_examples_in_epoch)
         self.context = context
         self.mfcc_size = n_mfccs*20 if include_dd else n_mfccs
         assert context > 0
