@@ -169,7 +169,7 @@ def get_config(batch_size, n_gpus):
     return TrainConfig(
         dataflow=data_train,
         callbacks=[
-            ModelSaver(),
+            ModelSaver(keep_checkpoint_every_n_hours=0.2),
             MinSaver('val-error-top1'),
             # HumanHyperParamSetter('learning_rate'),
             ScheduledHyperParamSetter('learning_rate', [(56, 2e-5), (64, 4e-6)]),
