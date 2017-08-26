@@ -11,4 +11,6 @@ num_prefetch_threads=4
 
 cmd="python rsr-dorefa.py --gpu=$gpu --data=$data_dir --shuffle_queue_buffer_size=$shuffle_q --bit_w=$bit_w --bit_a=$bit_a --output=$out_dir --num_prefetch_threads=$num_prefetch_threads"
 echo $cmd
-eval $cmd
+# eval $cmd
+
+echo "nohup ./run-gpu.sh > train.out 2> train.err < /dev/null &"
