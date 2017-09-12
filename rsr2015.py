@@ -13,7 +13,7 @@ from tensorpack.dataflow import RNGDataFlow
 
 __all__ = ['WholeUtteranceAsFrameRsr2015', 'RandomFramesBatchRsr2015', 'WholeUtteranceAsBatchRsr2015', 'RsrMfccFiles', 'RandomFramesBatchFromCacheRsr2015']
 
-def create_label_mapping(labels, save_path='../generator/spk_mappings.pickle'):
+def create_label_mapping(labels, save_path='train_cache/rsr_smlspk_mappings.pickle'):
     if os.path.isfile(save_path):
         with open(save_path, "rb") as f:
             mapping = pickle.load(f)
