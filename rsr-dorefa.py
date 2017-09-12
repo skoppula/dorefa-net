@@ -16,7 +16,7 @@ from tensorpack.tfutils.summary import *
 from tensorpack.tfutils.varreplace import remap_variables
 from tensorpack.dataflow import dataset
 from tensorpack.utils.gpu import get_nr_gpu
-from rsr2015 import Rsr2015
+from rsr2015 import *
 
 from dorefa import get_dorefa
 
@@ -38,24 +38,23 @@ To Run Pretrained Model:
 
 flags = tf.app.flags
 
-flags.DEFINE_integer('bit_w', 4, 'Bitwidth of weights')
-flags.DEFINE_integer('bit_a', 4, 'Bitwidth of gradients')
+flags.DEFINE_integer('bit_w', 32, 'Bitwidth of weights')
+flags.DEFINE_integer('bit_a', 32, 'Bitwidth of activations')
 
-flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
+flags.DEFINE_float('learning_rate', 0.001, 'Initial learning rate.')
 flags.DEFINE_integer('num_epochs', 100, 'Number of steps to run trainer.')
-flags.DEFINE_integer('total_batch_size', 128, 'Total batch size across all GPUs')
+flags.DEFINE_integer('total_batch_size', 512, 'Total batch size across all GPUs')
 
-flags.DEFINE_integer('n_layers', 4, 'Number of units in hidden layer 2.')
-flags.DEFINE_integer('state_size', 256, 'Number of units in hidden layer 2.')
+flags.DEFINE_integer('n_layers', 5, 'Number of units in hidden layer 2.')
+flags.DEFINE_integer('state_size', 512, 'Number of units in hidden layer 2.')
 flags.DEFINE_integer('num_prefetch_threads', 2, 'Number of prefetch_threads')
 
-flags.DEFINE_integer('n_context_frms', 20, 'Number of context frames')
+flags.DEFINE_integer('n_context_frms', 50, 'Number of context frames')
 flags.DEFINE_integer('n_mfccs', 20, 'Number of MFCC frames')
 
-flags.DEFINE_integer('shuffle_queue_buffer_size', 100, 'Size of shuffle queue')
-
-flags.DEFINE_string('data', './data/', 'Directory with train.idx/val.idx/test.idx')
-flags.DEFINE_string('output', './train_logs/', 'Directory with train.idx/val.idx/test.idx')
+flags.DEFINE_string('data', '/data/sls/scratch/skoppula/kaldi-rsr/numpy/small_spk_idxs/', 'Directory with train.idx/val.idx/test.idx')
+flags.DEFINE_string('trn_cache_dir', '/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/reproducible/train_cache/rsr_smlspk_512_50_20', 'Directory with train cache')
+flags.DEFINE_string('output', './train_logs_using_new_datastream/', 'Directory with model output')
 flags.DEFINE_string('load', None, 'File with load checkpoint')
 
 flags.DEFINE_string('inference_input', None, 'Files to run inference')
@@ -107,22 +106,22 @@ class Model(ModelDesc):
             for i in range(FLAGS.n_layers):
                 curr_layer = (curr_layer
                             .FullyConnected('fc' + str(i), FLAGS.state_size)
-                            .apply(fg)
-                            .BatchNorm('bn_fc' + str(i))
-                            .apply(activate))
+                            .apply(activate)
+                            .BatchNorm('bn_fc' + str(i)))
+                            # .Dropout('dropout', 0.7))
             logits = (curr_layer.FullyConnected('fc' + str(FLAGS.n_layers), 256)
-                      .apply(fg)
-                      .BatchNorm('bnfc' + str(FLAGS.n_layers))
                       .apply(nonlin)
+                      .BatchNorm('bnfc' + str(FLAGS.n_layers))
                       .FullyConnected('fct', 256, use_bias=True)())
 
         print_all_tf_vars()
 
         prob = tf.nn.softmax(logits, name='output')
 
+        # used for validation accuracy of utterance
         identity_guesses = flatten(tf.argmax(prob, axis=1))
         uniq_identities, _, count = tf.unique_with_counts(identity_guesses)
-        idx_to_identity_with_most_votes  = tf.argmax(count)
+        idx_to_identity_with_most_votes = tf.argmax(count)
         chosen_identity = tf.gather(uniq_identities, idx_to_identity_with_most_votes)
         wrong = tf.expand_dims(tf.not_equal(chosen_identity, tf.cast(label[0], tf.int64)), axis=0, name='utt-wrong')
 
@@ -143,27 +142,29 @@ class Model(ModelDesc):
         lr = get_scalar_var('learning_rate', FLAGS.learning_rate, summary=True)
         return tf.train.AdamOptimizer(lr, epsilon=1e-5)
 
-
-def get_data(partition, batch_size):
+def get_data(partition, batch_size, context):
     isTrain = partition == 'train'
-    rsr_ds = Rsr2015(FLAGS.data, partition, shuffle=isTrain)
     if isTrain:
-        ds = LocallyShuffleData(rsr_ds, FLAGS.shuffle_queue_buffer_size, nr_reuse=1)
-        ds = BatchData(ds, batch_size, remainder=not isTrain)
-        ds = PrefetchDataZMQ(ds, min(FLAGS.num_prefetch_threads, multiprocessing.cpu_count()))
-        return ds, rsr_ds.size()
+        rsr_ds = RandomFramesBatchFromCacheRsr2015(FLAGS.trn_cache_dir)
+        # rsr_ds = WholeUtteranceAsFrameRsr2015(FLAGS.data, partition, context=context, shuffle=isTrain)
+        # ds = LocallyShuffleData(rsr_ds, 5000, shuffle_interval=1000, nr_reuse=1)
+        # ds = BatchData(ds, batch_size, remainder=not isTrain)
+        # ds = PrefetchDataZMQ(ds, min(FLAGS.num_prefetch_threads, multiprocessing.cpu_count()))
+        # ds = PrefetchDataZMQ(ds, 1)
+        return rsr_ds, rsr_ds.size()
     else:
+        rsr_ds = WholeUtteranceAsBatchRsr2015(FLAGS.data, partition, context=context, shuffle=isTrain)
         return rsr_ds, rsr_ds.size()
 
 
 def get_config(batch_size, n_gpus):
     logger.set_logger_dir(FLAGS.output, action='d')
     logger.info("Outputting at: {}".format(FLAGS.output))
-    data_train, num_egs_per_trn_epoch  = get_data('train', batch_size)
-    logger.info("{} examples per train epoch".format(num_egs_per_trn_epoch))
+    data_train, num_batches_per_trn_epoch  = get_data('train', batch_size, FLAGS.n_context_frms)
+    logger.info("{} batches per train epoch".format(num_batches_per_trn_epoch))
 
-    data_test, num_egs_per_val_epoch = get_data('val', None)
-    logger.info("{} examples per val epoch".format(num_egs_per_val_epoch))
+    data_val, num_batches_per_val_epoch = get_data('val', None, FLAGS.n_context_frms)
+    logger.info("{} utterances per val epoch".format(num_batches_per_val_epoch))
 
 
     return TrainConfig(
@@ -173,38 +174,18 @@ def get_config(batch_size, n_gpus):
             MinSaver('val-error-top1'),
             # HumanHyperParamSetter('learning_rate'),
             ScheduledHyperParamSetter('learning_rate', [(56, 2e-5), (64, 4e-6)]),
-            InferenceRunner(data_test, [ScalarStats('cost'), ClassificationError('wrong-top1', 'val-error-top1'), ClassificationError('utt-wrong', 'val-utt-error')])
+            InferenceRunner(data_val, [ScalarStats('cost'), ClassificationError('wrong-top1', 'val-error-top1'), ClassificationError('utt-wrong', 'val-utt-error')])
         ],
         model=Model(),
-        steps_per_epoch=num_egs_per_trn_epoch/(batch_size*n_gpus),
+        steps_per_epoch=num_batches_per_trn_epoch/(n_gpus),
         max_epoch=100,
     )
-
-
-def run_example(model, sess_init, inputs):
-    pred_config = PredictConfig(
-        model=model,
-        session_init=sess_init,
-        input_names=['input'],
-        output_names=['output']
-    )
-    predictor = OfflinePredictor(pred_config)
-
-    for f in inputs:
-        assert os.path.isfile(f)
-        utt_data = np.load(f)
-        outputs = predictor([utt])[0]
-        prob = outputs[0]
-        ret = prob.argsort()[-10:][::-1]
-        print(f + ":")
-        print(list(zip(ret, prob[ret])))
 
 
 def main(_):
 
     if FLAGS.inference_input:
-        assert FLAGS.load.endswith('.npy')
-        run_example(Model(), DictRestore(np.load(FLAGS.load, encoding='latin1').item()), FLAGS.inference_input)
+        print("Not implemented")
         sys.exit()
 
     if FLAGS.gpu:

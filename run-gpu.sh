@@ -5,7 +5,7 @@ n_layers=4
 bit_a=4
 bit_w=4
 data_dir="/data/sls/scratch/skoppula/kaldi-rsr/numpy/"
-out_dir="./train_logs_model${model}_nl${n_layers}_ss${state_size}_bita${bit_a}_bitw${bit_w}"
+out_dir="/data/sls/scratch/skoppula/quantized-net/dorefa-net/train_logs_model${model}_nl${n_layers}_ss${state_size}_bita${bit_a}_bitw${bit_w}"
 shuffle_q=5000
 num_prefetch_threads=4
 
