@@ -6,3 +6,5 @@ train_logs/
 .git
 *.swp
 *train_logs*
+__pycache__
+dataflow*
