@@ -47,17 +47,21 @@ flags.DEFINE_integer('total_batch_size', 512, 'Total batch size across all GPUs'
 
 flags.DEFINE_integer('n_layers', 5, 'Number of units in hidden layer 2.')
 flags.DEFINE_integer('state_size', 512, 'Number of units in hidden layer 2.')
-flags.DEFINE_integer('num_prefetch_threads', 2, 'Number of prefetch_threads')
+flags.DEFINE_integer('num_prefetch_threads', 4, 'Number of prefetch_threads')
 
 flags.DEFINE_integer('n_context_frms', 50, 'Number of context frames')
 flags.DEFINE_integer('n_mfccs', 20, 'Number of MFCC frames')
 
 flags.DEFINE_string('data', '/data/sls/scratch/skoppula/kaldi-rsr/numpy/small_spk_idxs/', 'Directory with train.idx/val.idx/test.idx')
-flags.DEFINE_string('trn_cache_dir', '/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/reproducible/train_cache/rsr_smlspk_512_50_20', 'Directory with train cache')
-flags.DEFINE_string('output', './train_logs_using_new_datastream/', 'Directory with model output')
+flags.DEFINE_string('trn_cache_dir', '/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_cache/rsr_smlspk_512_50_20', 'Directory with train cache')
+flags.DEFINE_string('output', './train_logs_rsr_smlspk_dense_l5_ss512_w24_s24/', 'Directory with model output')
 flags.DEFINE_string('load', None, 'File with load checkpoint')
 
 flags.DEFINE_string('inference_input', None, 'Files to run inference')
+
+# FOR SOME EXPERIMENTS
+flags.DEFINE_boolean('use_clip', True, 'whether to use clip activations')
+flags.DEFINE_float('dropout', 1, 'whether to use dropout')
 
 flags.DEFINE_string('gpu', None, 'IDs of GPUs, comma seperated: e.g. 2,3')
 
@@ -70,6 +74,10 @@ def print_all_tf_vars():
 
 
 class Model(ModelDesc):
+    def __init__(self, n_spks):
+        super(Model, self).__init__()
+        self.n_spks = n_spks
+
     def _get_inputs(self):
         return [InputDesc(tf.float32, [None, FLAGS.n_context_frms*FLAGS.n_mfccs], 'input'),
                 InputDesc(tf.int32, [None], 'label')]
@@ -92,13 +100,14 @@ class Model(ModelDesc):
                 return fw(v)
 
         def nonlin(x):
-            if FLAGS.bit_a == 32:
+            if FLAGS.bit_a == 32 and not FLAGS.use_clip:
                 return tf.nn.relu(x)    # still use relu for 32bit cases
             return tf.clip_by_value(x, 0.0, 1.0)
 
         def activate(x):
             return fa(nonlin(x))
 
+        activations = []
         with remap_variables(new_get_variable), \
                 argscope(BatchNorm, decay=0.9, epsilon=1e-4), \
                 argscope([Conv2D, FullyConnected], use_bias=False, nl=tf.identity):
@@ -106,13 +115,15 @@ class Model(ModelDesc):
             for i in range(FLAGS.n_layers):
                 curr_layer = (curr_layer
                             .FullyConnected('fc' + str(i), FLAGS.state_size)
-                            .apply(activate)
-                            .BatchNorm('bn_fc' + str(i)))
-                            # .Dropout('dropout', 0.7))
+                            .apply(activate))
+                activations.append(curr_layer.tensor())
+                curr_layer = (curr_layer
+                            .BatchNorm('bn_fc' + str(i))
+                            .Dropout('dropout', FLAGS.dropout))
             logits = (curr_layer.FullyConnected('fc' + str(FLAGS.n_layers), 256)
                       .apply(nonlin)
                       .BatchNorm('bnfc' + str(FLAGS.n_layers))
-                      .FullyConnected('fct', 256, use_bias=True)())
+                      .FullyConnected('fct', self.n_spks, use_bias=True)())
 
         print_all_tf_vars()
 
@@ -138,6 +149,10 @@ class Model(ModelDesc):
         self.cost = tf.add_n([cost, wd_cost], name='cost')
         add_moving_summary(cost, wd_cost, self.cost)
 
+        for activation in activations:
+            add_activation_summary(activation)
+            tf.summary.histogram(activation.name, activation)
+
     def _get_optimizer(self):
         lr = get_scalar_var('learning_rate', FLAGS.learning_rate, summary=True)
         return tf.train.AdamOptimizer(lr, epsilon=1e-5)
@@ -145,13 +160,13 @@ class Model(ModelDesc):
 def get_data(partition, batch_size, context):
     isTrain = partition == 'train'
     if isTrain:
-        rsr_ds = RandomFramesBatchFromCacheRsr2015(FLAGS.trn_cache_dir)
         # rsr_ds = WholeUtteranceAsFrameRsr2015(FLAGS.data, partition, context=context, shuffle=isTrain)
         # ds = LocallyShuffleData(rsr_ds, 5000, shuffle_interval=1000, nr_reuse=1)
         # ds = BatchData(ds, batch_size, remainder=not isTrain)
-        # ds = PrefetchDataZMQ(ds, min(FLAGS.num_prefetch_threads, multiprocessing.cpu_count()))
+        rsr_ds = RandomFramesBatchFromCacheRsr2015(FLAGS.trn_cache_dir)
+        ds = PrefetchDataZMQ(rsr_ds, min(FLAGS.num_prefetch_threads, multiprocessing.cpu_count()))
         # ds = PrefetchDataZMQ(ds, 1)
-        return rsr_ds, rsr_ds.size()
+        return ds, rsr_ds.size()
     else:
         rsr_ds = WholeUtteranceAsBatchRsr2015(FLAGS.data, partition, context=context, shuffle=isTrain)
         return rsr_ds, rsr_ds.size()
@@ -160,12 +175,14 @@ def get_data(partition, batch_size, context):
 def get_config(batch_size, n_gpus):
     logger.set_logger_dir(FLAGS.output, action='d')
     logger.info("Outputting at: {}".format(FLAGS.output))
-    data_train, num_batches_per_trn_epoch  = get_data('train', batch_size, FLAGS.n_context_frms)
+    data_train, num_batches_per_trn_epoch = get_data('train', batch_size, FLAGS.n_context_frms)
     logger.info("{} batches per train epoch".format(num_batches_per_trn_epoch))
 
     data_val, num_batches_per_val_epoch = get_data('val', None, FLAGS.n_context_frms)
     logger.info("{} utterances per val epoch".format(num_batches_per_val_epoch))
 
+    n_spks = get_n_spks()
+    logger.info("Using {} speaker".format(n_spks))
 
     return TrainConfig(
         dataflow=data_train,
@@ -176,7 +193,7 @@ def get_config(batch_size, n_gpus):
             ScheduledHyperParamSetter('learning_rate', [(56, 2e-5), (64, 4e-6)]),
             InferenceRunner(data_val, [ScalarStats('cost'), ClassificationError('wrong-top1', 'val-error-top1'), ClassificationError('utt-wrong', 'val-utt-error')])
         ],
-        model=Model(),
+        model=Model(n_spks),
         steps_per_epoch=num_batches_per_trn_epoch/(n_gpus),
         max_epoch=100,
     )

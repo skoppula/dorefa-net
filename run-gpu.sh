@@ -1,16 +1,30 @@
-gpu=3
-model="fc"
-state_size=256
-n_layers=4
-bit_a=4
-bit_w=4
-data_dir="/data/sls/scratch/skoppula/kaldi-rsr/numpy/"
-out_dir="/data/sls/scratch/skoppula/quantized-net/dorefa-net/train_logs_model${model}_nl${n_layers}_ss${state_size}_bita${bit_a}_bitw${bit_w}"
-shuffle_q=5000
-num_prefetch_threads=4
+exp=$1
+if [ $exp -eq 0 ]; then
+    bit_a=32
+    bit_w=32
+    use_clip="False"
+    dropout=1
+elif [ $exp -eq 1 ]; then
+    bit_a=32
+    bit_w=32
+    use_clip="False"
+    dropout=0.9
+elif [ $exp -eq 2 ]; then
+    bit_a=32
+    bit_w=32
+    use_clip="False"
+    dropout=0.8
+elif [ $exp -eq 3 ]; then
+    bit_a=32
+    bit_w=32
+    use_clip="True"
+    dropout=1
+elif [ $exp -eq 4 ]; then
+    bit_a=31
+    bit_w=31
+    use_clip="False"
+    dropout=1
+fi
 
-cmd="python rsr-dorefa.py --gpu=$gpu --data=$data_dir --shuffle_queue_buffer_size=$shuffle_q --bit_w=$bit_w --bit_a=$bit_a --output=$out_dir --num_prefetch_threads=$num_prefetch_threads"
-echo $cmd
-# eval $cmd
-
-echo "nohup ./run-gpu.sh > train.out 2> train.err < /dev/null &"
+out_dir="/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_logs_do${dropout}_bita${bit_a}_bitw${bit_w}_clip${use_clip}"
+echo "python rsr-dorefa.py --bit_w=$bit_w --bit_a=$bit_a --output=$out_dir --use_clip=$use_clip --dropout=$dropout"

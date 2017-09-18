@@ -11,7 +11,13 @@ from ast import literal_eval as make_tuple
 
 from tensorpack.dataflow import RNGDataFlow
 
-__all__ = ['WholeUtteranceAsFrameRsr2015', 'RandomFramesBatchRsr2015', 'WholeUtteranceAsBatchRsr2015', 'RsrMfccFiles', 'RandomFramesBatchFromCacheRsr2015']
+__all__ = ['WholeUtteranceAsFrameRsr2015', 'RandomFramesBatchRsr2015', 'WholeUtteranceAsBatchRsr2015', 'RsrMfccFiles', 'RandomFramesBatchFromCacheRsr2015', 'get_n_spks']
+
+def get_n_spks(save_path='train_cache/rsr_smlspk_mappings.pickle'):
+    if os.path.isfile(save_path):
+        with open(save_path, "rb") as f:
+            mapping = pickle.load(f)
+    return len(mapping)
 
 def create_label_mapping(labels, save_path='train_cache/rsr_smlspk_mappings.pickle'):
     if os.path.isfile(save_path):
@@ -22,7 +28,6 @@ def create_label_mapping(labels, save_path='train_cache/rsr_smlspk_mappings.pick
         mapping = {label: i for i, label in enumerate(set(labels))}
         with open(save_path, "wb") as f:
             pickle.dump(mapping, f)
-    print("Number of unique labels:", len(mapping))
     mapped_labels = np.array([mapping[label] for label in labels], dtype='int32')
     return mapping, mapped_labels
 
@@ -89,6 +94,9 @@ class RandomFramesBatchFromCacheRsr2015(RsrMfccFiles):
         if not os.path.exists(self.cache_base_dir):
             print("Creating", self.cache_base_dir)
             os.makedirs(self.cache_base_dir)
+
+    def get_n_spks(self):
+        return len(self.mapping)
 
     def get_data(self):
         idxs = np.arange(len(self.batch_x_paths))
