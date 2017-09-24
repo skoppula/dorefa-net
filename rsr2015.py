@@ -13,13 +13,13 @@ from tensorpack.dataflow import RNGDataFlow
 
 __all__ = ['WholeUtteranceAsFrameRsr2015', 'RandomFramesBatchRsr2015', 'WholeUtteranceAsBatchRsr2015', 'RsrMfccFiles', 'RandomFramesBatchFromCacheRsr2015', 'get_n_spks']
 
-def get_n_spks(save_path='train_cache/rsr_smlspk_mappings.pickle'):
+def get_n_spks(save_path='/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_cache/rsr_smlspk_mappings.pickle'):
     if os.path.isfile(save_path):
         with open(save_path, "rb") as f:
             mapping = pickle.load(f)
     return len(mapping)
 
-def create_label_mapping(labels, save_path='train_cache/rsr_smlspk_mappings.pickle'):
+def create_label_mapping(labels, save_path='/data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_cache/rsr_smlspk_mappings.pickle'):
     if os.path.isfile(save_path):
         with open(save_path, "rb") as f:
             mapping = pickle.load(f)
@@ -242,6 +242,7 @@ class WholeUtteranceAsBatchRsr2015(RsrMfccFiles):
     def get_data(self):
         for fname, label in super(WholeUtteranceAsBatchRsr2015, self).get_data():
             utt_data = np.load(fname)[:,0:self.mfcc_size]
+            if utt_data.shape[0] <= self.context: continue
             # otherwise, we feed in utterance after utterance, one per batch
             out = window_stack(utt_data, stepsize=1, width=self.context)
             labels = np.array([label]*out.shape[0])

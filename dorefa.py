@@ -20,15 +20,16 @@ def get_dorefa(bitW, bitA, bitG):
         with G.gradient_override_map({"Round": "Identity"}):
             return tf.round(x * n) / n
 
-    def fw(x):
-        if bitW == 32:
+    def fw(x, force_quantization=False):
+        if bitW == 32 and not force_quantization:
             return x
         if bitW == 1:   # BWN
             with G.gradient_override_map({"Sign": "Identity"}):
                 E = tf.stop_gradient(tf.reduce_mean(tf.abs(x)))
                 return tf.sign(x / E) * E
-        x = tf.tanh(x)
-        x = x / tf.reduce_max(tf.abs(x)) * 0.5 + 0.5
+        # x = tf.tanh(x)
+        # x = x / tf.reduce_max(tf.abs(x)) * 0.5 + 0.5
+        x = tf.clip_by_value(x * 0.5 + 0.5, 0.0, 1.0) # it seems as though most weights are within -1 to 1 region anyways
         return 2 * quantize(x, bitW) - 1
 
     def fa(x):

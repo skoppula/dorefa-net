@@ -9,6 +9,7 @@ import numpy as np
 import multiprocessing
 import os
 import sys
+import socket
 
 from tensorpack import *
 from tensorpack.tfutils.symbolic_functions import *
@@ -28,12 +29,6 @@ http://arxiv.org/abs/1606.06160
 Note that the effective batch size in SyncMultiGPUTrainer is actually
 BATCH_SIZE * NUM_GPU. With a different number of GPUs in use, things might
 be a bit different, especially for learning rate.
-
-To Train:
-    ./rsr-dorefa.py --dorefa 1,2,6 --data PATH --gpu 0,1
-
-To Run Pretrained Model:
-    ./alexnet-dorefa.py --load alexnet-126.npy --run a.jpg --dorefa 1,2,6
 """
 
 flags = tf.app.flags
@@ -61,7 +56,8 @@ flags.DEFINE_string('inference_input', None, 'Files to run inference')
 
 # FOR SOME EXPERIMENTS
 flags.DEFINE_boolean('use_clip', True, 'whether to use clip activations')
-flags.DEFINE_float('dropout', 1, 'whether to use dropout')
+flags.DEFINE_boolean('force_quantization', True, 'whether to force quantization even with 32-bit')
+flags.DEFINE_float('dropout', 1.0, 'whether to use dropout')
 
 flags.DEFINE_string('gpu', None, 'IDs of GPUs, comma seperated: e.g. 2,3')
 
@@ -86,18 +82,17 @@ class Model(ModelDesc):
         input, label = inputs
 
         fw, fa, fg = get_dorefa(FLAGS.bit_w, FLAGS.bit_a, 32)
+        logger.info("Using {}-bit activations and {}-bit weights".format(FLAGS.bit_a, FLAGS.bit_w))
+        logger.info("Using trn_cache: {}".format(FLAGS.trn_cache_dir))
+        logger.info("Using host: {}".format(socket.gethostname()))
 
         old_get_variable = tf.get_variable
 
         # monkey-patch tf.get_variable to apply fw
         def new_get_variable(v):
             name = v.op.name
-            # don't binarize first and last layer
-            if not name.endswith('W') or 'fc0' in name or 'fct' in name:
-                return v
-            else:
-                logger.info("Binarizing weight {}".format(v.op.name))
-                return fw(v)
+            logger.info("Binarizing weight {}".format(v.op.name))
+            return fw(v, FLAGS.force_quantization)
 
         def nonlin(x):
             if FLAGS.bit_a == 32 and not FLAGS.use_clip:
@@ -109,21 +104,17 @@ class Model(ModelDesc):
 
         activations = []
         with remap_variables(new_get_variable), \
-                argscope(BatchNorm, decay=0.9, epsilon=1e-4), \
                 argscope([Conv2D, FullyConnected], use_bias=False, nl=tf.identity):
             curr_layer = LinearWrap(input)
             for i in range(FLAGS.n_layers):
                 curr_layer = (curr_layer
                             .FullyConnected('fc' + str(i), FLAGS.state_size)
+                            .LayerNorm('ln_fc' + str(i))
                             .apply(activate))
                 activations.append(curr_layer.tensor())
                 curr_layer = (curr_layer
-                            .BatchNorm('bn_fc' + str(i))
                             .Dropout('dropout', FLAGS.dropout))
-            logits = (curr_layer.FullyConnected('fc' + str(FLAGS.n_layers), 256)
-                      .apply(nonlin)
-                      .BatchNorm('bnfc' + str(FLAGS.n_layers))
-                      .FullyConnected('fct', self.n_spks, use_bias=True)())
+            logits = curr_layer.FullyConnected('fct', self.n_spks, use_bias=True)())
 
         print_all_tf_vars()
 

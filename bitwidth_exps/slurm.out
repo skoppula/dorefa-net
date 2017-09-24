@@ -1,0 +1,856 @@
+sls-sm-7 2,3
+SLURM_JOBID=34770
+SLURM_TASKID=
+Failed to load OpenCL runtime (expected version 1.1+)
+[32m[0920 23:22:38 @logger.py:74][0m Argv: rsr-bitwidth-exps.py --bit_w=20 --bit_a=30 --output=./train_logs_a30_w20/
+[32m[0920 23:22:38 @rsr-bitwidth-exps.py:171][0m Outputting at: ./train_logs_a30_w20/
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:173][0m 31682 batches per train epoch
+/data/sls/scratch/skoppula/kaldi-rsr/numpy/small_spk_idxs/val.shapes
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:176][0m 13290 utterances per val epoch
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:179][0m Using 45 speaker
+[32m[0920 23:22:40 @inference_runner.py:81][0m InferenceRunner will eval on an InputSource of size 13290
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:213][0m Using 4 prefetch threads
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:220][0m Using CPU. Batch size: 512
+[32m[0920 23:22:40 @input_source.py:235][0m Setting up the queue 'QueueInput/input_queue' for CPU prefetching ...
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:85][0m Using 30-bit activations and 20-bit weights
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:86][0m Using trn_cache: /data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_cache/rsr_smlspk_512_50_20
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:87][0m Using host: sls-sm-7
+[32m[0920 23:22:40 @registry.py:121][0m fc0 input: [None, 1000]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc0/W
+[32m[0920 23:22:40 @registry.py:129][0m fc0 output: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc0/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc0/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fc1 input: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc1/W
+[32m[0920 23:22:40 @registry.py:129][0m fc1 output: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc1/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc1/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fc2 input: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc2/W
+[32m[0920 23:22:40 @registry.py:129][0m fc2 output: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc2/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc2/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fc3 input: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc3/W
+[32m[0920 23:22:40 @registry.py:129][0m fc3 output: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc3/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc3/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fc4 input: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc4/W
+[32m[0920 23:22:40 @registry.py:129][0m fc4 output: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc4/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc4/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fc5 input: [None, 512]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc5/W
+[32m[0920 23:22:40 @registry.py:129][0m fc5 output: [None, 256]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight lnfc5/beta
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight lnfc5/gamma
+[32m[0920 23:22:40 @registry.py:121][0m fct input: [None, 256]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fct/W
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:94][0m Binarizing weight fct/b
+[32m[0920 23:22:40 @registry.py:129][0m fct output: [None, 45]
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:67][0m Model variables:
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size:0, ()
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size/biased:0, ()
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size/local_step:0, ()
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc0/W:0, (1000, 512)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/beta:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/gamma:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc1/W:0, (512, 512)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/beta:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/gamma:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc2/W:0, (512, 512)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/beta:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/gamma:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc3/W:0, (512, 512)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/beta:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/gamma:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc4/W:0, (512, 512)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/beta:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/gamma:0, (512,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fc5/W:0, (512, 256)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	lnfc5/beta:0, (256,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	lnfc5/gamma:0, (256,)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fct/W:0, (256, 45)
+[32m[0920 23:22:40 @rsr-bitwidth-exps.py:69][0m 	fct/b:0, (45,)
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc0/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc1/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc2/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc3/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc4/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fc5/W:0
+[32m[0920 23:22:40 @regularize.py:18][0m Apply regularizer for fct/W:0
+[32m[0920 23:22:42 @model_utils.py:47][0m [36mModel Parameters: 
+[0mname            shape           dim
+--------------  -----------  ------
+fc0/W:0         [1000, 512]  512000
+ln_fc0/beta:0   [512]           512
+ln_fc0/gamma:0  [512]           512
+fc1/W:0         [512, 512]   262144
+ln_fc1/beta:0   [512]           512
+ln_fc1/gamma:0  [512]           512
+fc2/W:0         [512, 512]   262144
+ln_fc2/beta:0   [512]           512
+ln_fc2/gamma:0  [512]           512
+fc3/W:0         [512, 512]   262144
+ln_fc3/beta:0   [512]           512
+ln_fc3/gamma:0  [512]           512
+fc4/W:0         [512, 512]   262144
+ln_fc4/beta:0   [512]           512
+ln_fc4/gamma:0  [512]           512
+fc5/W:0         [512, 256]   131072
+lnfc5/beta:0    [256]           256
+lnfc5/gamma:0   [256]           256
+fct/W:0         [256, 45]     11520
+fct/b:0         [45]             45[36m
+Total #vars=20, #param=1708845 (6.52 MB assuming all float32)[0m
+[32m[0920 23:22:42 @base.py:167][0m Setup callbacks graph ...
+[32m[0920 23:22:42 @predictor_factory.py:62][0m Building predictor tower 'InferenceTower' on device /gpu:0 ...
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:85][0m Using 30-bit activations and 20-bit weights
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:86][0m Using trn_cache: /data/sls/scratch/skoppula/mfcc-nns/rsr-experiments/dorefa/train_cache/rsr_smlspk_512_50_20
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:87][0m Using host: sls-sm-7
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc0/W
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc0/beta
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc0/gamma
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc1/W
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc1/beta
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc1/gamma
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc2/W
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc2/beta
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc2/gamma
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc3/W
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc3/beta
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc3/gamma
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc4/W
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc4/beta
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight ln_fc4/gamma
+[32m[0920 23:22:42 @rsr-bitwidth-exps.py:94][0m Binarizing weight fc5/W
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:94][0m Binarizing weight lnfc5/beta
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:94][0m Binarizing weight lnfc5/gamma
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:94][0m Binarizing weight fct/W
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:94][0m Binarizing weight fct/b
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:67][0m Model variables:
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size/biased:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/QueueInput/queue_size/local_step:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc0/W:0, (1000, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/beta:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/gamma:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc1/W:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/beta:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/gamma:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc2/W:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/beta:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/gamma:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc3/W:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/beta:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/gamma:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc4/W:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/beta:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/gamma:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc5/W:0, (512, 256)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/beta:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/gamma:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/W:0, (256, 45)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/b:0, (45,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/train-error-top1:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/train-error-top1/biased:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/train-error-top1/local_step:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cross_entropy_loss:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cross_entropy_loss/biased:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cross_entropy_loss/local_step:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/regularize_cost_1:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/regularize_cost_1/biased:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/regularize_cost_1/local_step:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cost:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cost/biased:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	EMA/cost/local_step:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	learning_rate:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	beta1_power:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	beta2_power:0, ()
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc0/W/Adam:0, (1000, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc0/W/Adam_1:0, (1000, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/beta/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/beta/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/gamma/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc0/gamma/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc1/W/Adam:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc1/W/Adam_1:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/beta/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/beta/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/gamma/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc1/gamma/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc2/W/Adam:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc2/W/Adam_1:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/beta/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/beta/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/gamma/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc2/gamma/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc3/W/Adam:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc3/W/Adam_1:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/beta/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/beta/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/gamma/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc3/gamma/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc4/W/Adam:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc4/W/Adam_1:0, (512, 512)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/beta/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/beta/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/gamma/Adam:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	ln_fc4/gamma/Adam_1:0, (512,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc5/W/Adam:0, (512, 256)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fc5/W/Adam_1:0, (512, 256)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/beta/Adam:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/beta/Adam_1:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/gamma/Adam:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	lnfc5/gamma/Adam_1:0, (256,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/W/Adam:0, (256, 45)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/W/Adam_1:0, (256, 45)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/b/Adam:0, (45,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	fct/b/Adam_1:0, (45,)
+[32m[0920 23:22:43 @rsr-bitwidth-exps.py:69][0m 	global_step:0, ()
+[32m[0920 23:22:43 @summary.py:34][0m Maintain moving average summary of 4 tensors.
+[32m[0920 23:22:44 @base.py:171][0m Creating the session ...
+2017-09-20 23:22:44.173742: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-09-20 23:22:44.173759: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-09-20 23:22:44.173765: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-09-20 23:22:44.173769: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-09-20 23:22:44.173773: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-09-20 23:22:47.067544: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 0 with properties: 
+name: TITAN X (Pascal)
+major: 6 minor: 1 memoryClockRate (GHz) 1.531
+pciBusID 0000:81:00.0
+Total memory: 11.90GiB
+Free memory: 11.75GiB
+2017-09-20 23:22:47.067575: I tensorflow/core/common_runtime/gpu/gpu_device.cc:976] DMA: 0 
+2017-09-20 23:22:47.067581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 0:   Y 
+2017-09-20 23:22:47.067590: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: TITAN X (Pascal), pci bus id: 0000:81:00.0)
+[32m[0920 23:22:53 @sesscreate.py:35][0m Global and local variables initialized.
+[32m[0920 23:22:53 @base.py:175][0m Initializing the session ...
+[32m[0920 23:22:53 @base.py:182][0m Graph Finalized.
+[32m[0920 23:22:53 @concurrency.py:36][0m Starting EnqueueThread QueueInput/input_queue ...
+[32m[0920 23:22:53 @base.py:228][0m Start Epoch 1 ...
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+srun: Job step creation temporarily disabled, retrying
+  0%|          |0/31682[00:00<?,?it/s] 34%|###4      |10821/31682[05:00<09:38,36.05it/s]           35%|###5      |11172/31682[05:10<09:28,36.05it/s] 68%|######8   |21688/31682[10:00<04:36,36.14it/s]           71%|#######   |22432/31682[10:10<04:15,36.14it/s]100%|##########|31682/31682[13:18<00:00,39.67it/s]
+[32m[0920 23:36:12 @base.py:238][0m Epoch 1 (global_step 31682) finished, time:798.66 sec.
+[32m[0920 23:36:12 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-31682.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:14<00:00,68.38it/s]
+[32m[0920 23:39:27 @monitor.py:359][0m QueueInput/queue_size: 2.3289
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_11-rms: 0.30552
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.66334
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_15-rms: 0.31079
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.67831
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_19-rms: 0.31992
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.67619
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_3-rms: 0.44102
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.56782
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_7-rms: 0.24759
+[32m[0920 23:39:27 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.66934
+[32m[0920 23:39:27 @monitor.py:359][0m cost: 1.1878
+[32m[0920 23:39:27 @monitor.py:359][0m cross_entropy_loss: 0.95627
+[32m[0920 23:39:27 @monitor.py:359][0m learning_rate: 0.001
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc0/W-rms: 0.24656
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc1/W-rms: 0.24373
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc2/W-rms: 0.23688
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc3/W-rms: 0.22151
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc4/W-rms: 0.20573
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fc5/W-rms: 0.21633
+[32m[0920 23:39:27 @monitor.py:359][0m param-summary/fct/W-rms: 0.31676
+[32m[0920 23:39:27 @monitor.py:359][0m regularize_cost_1: 0.23151
+[32m[0920 23:39:27 @monitor.py:359][0m train-error-top1: 0.28865
+[32m[0920 23:39:27 @monitor.py:359][0m val-error-top1: 0.35951
+[32m[0920 23:39:27 @monitor.py:359][0m val-utt-error: 0.063807
+[32m[0920 23:39:27 @monitor.py:359][0m validation_cost: 1.4523
+[32m[0920 23:39:27 @group.py:42][0m Callbacks took 194.880 sec in total. InferenceRunner: 194.381sec
+[32m[0920 23:39:27 @base.py:228][0m Start Epoch 2 ...
+  0%|          |0/31682[00:00<?,?it/s] 46%|####6     |14598/31682[05:00<05:51,48.66it/s]           47%|####7     |15015/31682[05:10<05:42,48.66it/s] 89%|########9 |28331/31682[10:00<01:11,47.17it/s]           91%|######### |28783/31682[10:10<01:01,47.17it/s]100%|##########|31682/31682[11:12<00:00,47.13it/s]
+[32m[0920 23:50:39 @base.py:238][0m Epoch 2 (global_step 63364) finished, time:672.21 sec.
+[32m[0920 23:50:39 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-63364.
+[32m[0920 23:50:41 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:16<00:00,97.38it/s]
+[32m[0920 23:52:57 @monitor.py:359][0m QueueInput/queue_size: 0.79545
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_11-rms: 0.29306
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.66953
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_15-rms: 0.30017
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.69032
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_19-rms: 0.30135
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.70255
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_3-rms: 0.44041
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.5526
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_7-rms: 0.24226
+[32m[0920 23:52:57 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.66995
+[32m[0920 23:52:57 @monitor.py:359][0m cost: 1.0286
+[32m[0920 23:52:57 @monitor.py:359][0m cross_entropy_loss: 0.69517
+[32m[0920 23:52:57 @monitor.py:359][0m learning_rate: 0.001
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27945
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc1/W-rms: 0.30347
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc2/W-rms: 0.29495
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc3/W-rms: 0.27468
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc4/W-rms: 0.24985
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fc5/W-rms: 0.25709
+[32m[0920 23:52:57 @monitor.py:359][0m param-summary/fct/W-rms: 0.37546
+[32m[0920 23:52:57 @monitor.py:359][0m regularize_cost_1: 0.33339
+[32m[0920 23:52:57 @monitor.py:359][0m train-error-top1: 0.21643
+[32m[0920 23:52:57 @monitor.py:359][0m val-error-top1: 0.30174
+[32m[0920 23:52:57 @monitor.py:359][0m val-utt-error: 0.038375
+[32m[0920 23:52:57 @monitor.py:359][0m validation_cost: 1.3568
+[32m[0920 23:52:57 @group.py:42][0m Callbacks took 138.081 sec in total. InferenceRunner: 136.485sec
+[32m[0920 23:52:57 @base.py:228][0m Start Epoch 3 ...
+  0%|          |0/31682[00:00<?,?it/s] 43%|####2     |13573/31682[05:00<06:40,45.23it/s]           44%|####3     |13914/31682[05:10<06:32,45.23it/s] 79%|#######9  |25073/31682[10:00<02:39,41.49it/s]           80%|########  |25439/31682[10:10<02:30,41.49it/s]100%|##########|31682/31682[12:08<00:00,43.46it/s]
+[32m[0921 00:05:06 @base.py:238][0m Epoch 3 (global_step 95046) finished, time:728.95 sec.
+[32m[0921 00:05:07 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-95046.
+[32m[0921 00:05:08 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:01<00:00,73.36it/s]
+[32m[0921 00:08:09 @monitor.py:359][0m QueueInput/queue_size: 1.6139
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_11-rms: 0.28467
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.67955
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_15-rms: 0.29003
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.70104
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_19-rms: 0.28708
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.72253
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_3-rms: 0.43656
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.54458
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_7-rms: 0.24006
+[32m[0921 00:08:09 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.66783
+[32m[0921 00:08:09 @monitor.py:359][0m cost: 0.99303
+[32m[0921 00:08:09 @monitor.py:359][0m cross_entropy_loss: 0.63993
+[32m[0921 00:08:09 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27746
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31652
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc2/W-rms: 0.30905
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc3/W-rms: 0.28776
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc4/W-rms: 0.26026
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26519
+[32m[0921 00:08:09 @monitor.py:359][0m param-summary/fct/W-rms: 0.40322
+[32m[0921 00:08:09 @monitor.py:359][0m regularize_cost_1: 0.35311
+[32m[0921 00:08:09 @monitor.py:359][0m train-error-top1: 0.19358
+[32m[0921 00:08:09 @monitor.py:359][0m val-error-top1: 0.28712
+[32m[0921 00:08:09 @monitor.py:359][0m val-utt-error: 0.031678
+[32m[0921 00:08:09 @monitor.py:359][0m validation_cost: 1.3434
+[32m[0921 00:08:09 @group.py:42][0m Callbacks took 182.827 sec in total. InferenceRunner: 181.170sec
+[32m[0921 00:08:09 @base.py:228][0m Start Epoch 4 ...
+  0%|          |0/31682[00:00<?,?it/s] 36%|###6      |11556/31682[05:00<08:42,38.52it/s]           39%|###8      |12232/31682[05:10<08:24,38.52it/s] 73%|#######3  |23263/31682[10:00<03:37,38.77it/s]           74%|#######4  |23588/31682[10:10<03:28,38.77it/s]100%|##########|31682/31682[13:56<00:00,37.87it/s]
+[32m[0921 00:22:05 @base.py:238][0m Epoch 4 (global_step 126728) finished, time:836.51 sec.
+[32m[0921 00:22:06 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-126728.
+[32m[0921 00:22:07 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:10<00:00,69.86it/s]
+[32m[0921 00:25:17 @monitor.py:359][0m QueueInput/queue_size: 1.0935
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_11-rms: 0.2853
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.67676
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_15-rms: 0.28324
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.70849
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_19-rms: 0.28347
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.73009
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_3-rms: 0.43045
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.54568
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_7-rms: 0.24196
+[32m[0921 00:25:17 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67021
+[32m[0921 00:25:17 @monitor.py:359][0m cost: 1.0244
+[32m[0921 00:25:17 @monitor.py:359][0m cross_entropy_loss: 0.64766
+[32m[0921 00:25:17 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc0/W-rms: 0.28212
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32684
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc2/W-rms: 0.321
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29999
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27192
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27565
+[32m[0921 00:25:17 @monitor.py:359][0m param-summary/fct/W-rms: 0.41774
+[32m[0921 00:25:17 @monitor.py:359][0m regularize_cost_1: 0.37675
+[32m[0921 00:25:17 @monitor.py:359][0m train-error-top1: 0.19359
+[32m[0921 00:25:17 @monitor.py:359][0m val-error-top1: 0.27233
+[32m[0921 00:25:17 @monitor.py:359][0m val-utt-error: 0.028217
+[32m[0921 00:25:17 @monitor.py:359][0m validation_cost: 1.3004
+[32m[0921 00:25:17 @group.py:42][0m Callbacks took 191.696 sec in total. InferenceRunner: 190.259sec
+[32m[0921 00:25:17 @base.py:228][0m Start Epoch 5 ...
+  0%|          |0/31682[00:00<?,?it/s] 61%|######    |19268/31682[05:00<03:13,64.23it/s]           63%|######2   |19959/31682[05:10<03:02,64.23it/s]100%|##########|31682/31682[08:48<00:00,59.98it/s]
+[32m[0921 00:34:05 @base.py:238][0m Epoch 5 (global_step 158410) finished, time:528.25 sec.
+[32m[0921 00:34:06 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-158410.
+[32m[0921 00:34:06 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:22<00:00,93.03it/s]
+[32m[0921 00:36:29 @monitor.py:359][0m QueueInput/queue_size: 2.5658
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_11-rms: 0.2845
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.67744
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_15-rms: 0.28515
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.71014
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_19-rms: 0.27787
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.73679
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_3-rms: 0.42696
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.54885
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_7-rms: 0.2416
+[32m[0921 00:36:29 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67154
+[32m[0921 00:36:29 @monitor.py:359][0m cost: 0.95967
+[32m[0921 00:36:29 @monitor.py:359][0m cross_entropy_loss: 0.58691
+[32m[0921 00:36:29 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27766
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32522
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc2/W-rms: 0.32013
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30005
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27242
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27469
+[32m[0921 00:36:29 @monitor.py:359][0m param-summary/fct/W-rms: 0.42712
+[32m[0921 00:36:29 @monitor.py:359][0m regularize_cost_1: 0.37275
+[32m[0921 00:36:29 @monitor.py:359][0m train-error-top1: 0.181
+[32m[0921 00:36:29 @monitor.py:359][0m val-error-top1: 0.26977
+[32m[0921 00:36:29 @monitor.py:359][0m val-utt-error: 0.025734
+[32m[0921 00:36:29 @monitor.py:359][0m validation_cost: 1.2902
+[32m[0921 00:36:29 @group.py:42][0m Callbacks took 143.746 sec in total. InferenceRunner: 142.868sec
+[32m[0921 00:36:29 @base.py:228][0m Start Epoch 6 ...
+  0%|          |0/31682[00:00<?,?it/s] 66%|######6   |20997/31682[05:00<02:32,69.99it/s]           69%|######8   |21752/31682[05:10<02:21,69.99it/s]100%|##########|31682/31682[08:15<00:00,63.93it/s]
+[32m[0921 00:44:45 @base.py:238][0m Epoch 6 (global_step 190092) finished, time:495.59 sec.
+[32m[0921 00:44:45 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-190092.
+[32m[0921 00:44:46 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:20<00:00,94.92it/s]
+[32m[0921 00:47:06 @monitor.py:359][0m QueueInput/queue_size: 0.88603
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_11-rms: 0.28347
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.67762
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_15-rms: 0.28268
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.71227
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_19-rms: 0.27645
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.74008
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_3-rms: 0.42605
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.54875
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_7-rms: 0.23777
+[32m[0921 00:47:06 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67493
+[32m[0921 00:47:06 @monitor.py:359][0m cost: 0.90167
+[32m[0921 00:47:06 @monitor.py:359][0m cross_entropy_loss: 0.56549
+[32m[0921 00:47:06 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc0/W-rms: 0.26186
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc1/W-rms: 0.30813
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc2/W-rms: 0.30362
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc3/W-rms: 0.28565
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc4/W-rms: 0.26054
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26158
+[32m[0921 00:47:06 @monitor.py:359][0m param-summary/fct/W-rms: 0.43419
+[32m[0921 00:47:06 @monitor.py:359][0m regularize_cost_1: 0.33617
+[32m[0921 00:47:06 @monitor.py:359][0m train-error-top1: 0.16881
+[32m[0921 00:47:06 @monitor.py:359][0m val-error-top1: 0.26246
+[32m[0921 00:47:06 @monitor.py:359][0m val-utt-error: 0.023175
+[32m[0921 00:47:06 @monitor.py:359][0m validation_cost: 1.2392
+[32m[0921 00:47:06 @group.py:42][0m Callbacks took 141.685 sec in total. InferenceRunner: 140.023sec
+[32m[0921 00:47:06 @base.py:228][0m Start Epoch 7 ...
+  0%|          |0/31682[00:00<?,?it/s] 43%|####2     |13531/31682[05:00<06:42,45.10it/s]           45%|####5     |14307/31682[05:10<06:25,45.10it/s] 90%|########9 |28441/31682[10:00<01:08,47.27it/s]           91%|######### |28771/31682[10:10<01:01,47.27it/s]100%|##########|31682/31682[11:25<00:00,46.18it/s]
+[32m[0921 00:58:32 @base.py:238][0m Epoch 7 (global_step 221774) finished, time:686.00 sec.
+[32m[0921 00:58:33 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-221774.
+[32m[0921 00:58:34 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:00<00:00,73.45it/s]
+[32m[0921 01:01:35 @monitor.py:359][0m QueueInput/queue_size: 2.6052
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_11-rms: 0.28281
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68015
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_15-rms: 0.28178
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.71551
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_19-rms: 0.27171
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.74298
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_3-rms: 0.42367
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.55246
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_7-rms: 0.23595
+[32m[0921 01:01:35 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67504
+[32m[0921 01:01:35 @monitor.py:359][0m cost: 0.9018
+[32m[0921 01:01:35 @monitor.py:359][0m cross_entropy_loss: 0.53769
+[32m[0921 01:01:35 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc0/W-rms: 0.2729
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31912
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc2/W-rms: 0.31534
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29818
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27259
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27334
+[32m[0921 01:01:35 @monitor.py:359][0m param-summary/fct/W-rms: 0.43463
+[32m[0921 01:01:35 @monitor.py:359][0m regularize_cost_1: 0.36411
+[32m[0921 01:01:35 @monitor.py:359][0m train-error-top1: 0.15931
+[32m[0921 01:01:35 @monitor.py:359][0m val-error-top1: 0.25807
+[32m[0921 01:01:35 @monitor.py:359][0m val-utt-error: 0.022423
+[32m[0921 01:01:35 @monitor.py:359][0m validation_cost: 1.2542
+[32m[0921 01:01:35 @group.py:42][0m Callbacks took 182.290 sec in total. InferenceRunner: 180.950sec
+[32m[0921 01:01:35 @base.py:228][0m Start Epoch 8 ...
+  0%|          |0/31682[00:00<?,?it/s] 43%|####3     |13747/31682[05:00<06:31,45.82it/s]           45%|####4     |14118/31682[05:10<06:23,45.82it/s] 79%|#######8  |25011/31682[10:00<02:41,41.24it/s]           80%|########  |25366/31682[10:10<02:33,41.24it/s]100%|##########|31682/31682[12:11<00:00,43.33it/s]
+[32m[0921 01:13:46 @base.py:238][0m Epoch 8 (global_step 253456) finished, time:731.26 sec.
+[32m[0921 01:13:47 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-253456.
+[32m[0921 01:13:47 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:02<00:00,72.92it/s]
+[32m[0921 01:16:50 @monitor.py:359][0m QueueInput/queue_size: 50
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_11-rms: 0.28308
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68193
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_15-rms: 0.27948
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.71887
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_19-rms: 0.26884
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.74953
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_3-rms: 0.42057
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.55536
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_7-rms: 0.23982
+[32m[0921 01:16:50 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67339
+[32m[0921 01:16:50 @monitor.py:359][0m cost: 0.79494
+[32m[0921 01:16:50 @monitor.py:359][0m cross_entropy_loss: 0.42146
+[32m[0921 01:16:50 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27452
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32401
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc2/W-rms: 0.32064
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30317
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27612
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27648
+[32m[0921 01:16:50 @monitor.py:359][0m param-summary/fct/W-rms: 0.43788
+[32m[0921 01:16:50 @monitor.py:359][0m regularize_cost_1: 0.37348
+[32m[0921 01:16:50 @monitor.py:359][0m train-error-top1: 0.13187
+[32m[0921 01:16:50 @monitor.py:359][0m val-error-top1: 0.23384
+[32m[0921 01:16:50 @monitor.py:359][0m val-utt-error: 0.01535
+[32m[0921 01:16:50 @monitor.py:359][0m validation_cost: 1.1912
+[32m[0921 01:16:50 @group.py:42][0m Callbacks took 183.785 sec in total. InferenceRunner: 182.267sec
+[32m[0921 01:16:50 @base.py:228][0m Start Epoch 9 ...
+  0%|          |0/31682[00:00<?,?it/s] 63%|######2   |19808/31682[05:00<02:59,66.03it/s]           64%|######4   |20321/31682[05:10<02:52,66.03it/s]100%|##########|31682/31682[08:40<00:00,60.88it/s]
+[32m[0921 01:25:30 @base.py:238][0m Epoch 9 (global_step 285138) finished, time:520.40 sec.
+[32m[0921 01:25:30 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-285138.
+[32m[0921 01:25:31 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:21<00:00,94.07it/s]
+[32m[0921 01:27:52 @monitor.py:359][0m QueueInput/queue_size: 1.4489
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_11-rms: 0.28271
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68092
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_15-rms: 0.27835
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72012
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_19-rms: 0.26336
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.75298
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_3-rms: 0.41819
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.55838
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_7-rms: 0.23684
+[32m[0921 01:27:52 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67729
+[32m[0921 01:27:52 @monitor.py:359][0m cost: 0.90414
+[32m[0921 01:27:52 @monitor.py:359][0m cross_entropy_loss: 0.5372
+[32m[0921 01:27:52 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27171
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32064
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc2/W-rms: 0.3175
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30084
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27467
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27466
+[32m[0921 01:27:52 @monitor.py:359][0m param-summary/fct/W-rms: 0.43899
+[32m[0921 01:27:52 @monitor.py:359][0m regularize_cost_1: 0.36694
+[32m[0921 01:27:52 @monitor.py:359][0m train-error-top1: 0.15996
+[32m[0921 01:27:52 @monitor.py:359][0m val-error-top1: 0.24994
+[32m[0921 01:27:52 @monitor.py:359][0m val-utt-error: 0.02009
+[32m[0921 01:27:52 @monitor.py:359][0m validation_cost: 1.2267
+[32m[0921 01:27:52 @group.py:42][0m Callbacks took 142.131 sec in total. InferenceRunner: 141.294sec
+[32m[0921 01:27:52 @base.py:228][0m Start Epoch 10 ...
+  0%|          |0/31682[00:00<?,?it/s] 66%|######6   |21000/31682[05:00<02:32,70.00it/s]           69%|######8   |21769/31682[05:10<02:21,70.00it/s]100%|##########|31682/31682[07:57<00:00,66.39it/s]
+[32m[0921 01:35:49 @base.py:238][0m Epoch 10 (global_step 316820) finished, time:477.19 sec.
+[32m[0921 01:35:50 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-316820.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:32<00:00,87.05it/s]
+[32m[0921 01:38:22 @monitor.py:359][0m QueueInput/queue_size: 1.1521
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_11-rms: 0.28358
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.67914
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_15-rms: 0.27863
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.71892
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_19-rms: 0.26491
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.75572
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_3-rms: 0.41781
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.55874
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_7-rms: 0.23638
+[32m[0921 01:38:22 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67692
+[32m[0921 01:38:22 @monitor.py:359][0m cost: 0.81749
+[32m[0921 01:38:22 @monitor.py:359][0m cross_entropy_loss: 0.48752
+[32m[0921 01:38:22 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc0/W-rms: 0.25522
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc1/W-rms: 0.30541
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc2/W-rms: 0.30166
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc3/W-rms: 0.28561
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc4/W-rms: 0.26054
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26029
+[32m[0921 01:38:22 @monitor.py:359][0m param-summary/fct/W-rms: 0.44543
+[32m[0921 01:38:22 @monitor.py:359][0m regularize_cost_1: 0.32997
+[32m[0921 01:38:22 @monitor.py:359][0m train-error-top1: 0.14778
+[32m[0921 01:38:22 @monitor.py:359][0m val-error-top1: 0.25294
+[32m[0921 01:38:22 @monitor.py:359][0m val-utt-error: 0.019714
+[32m[0921 01:38:22 @monitor.py:359][0m validation_cost: 1.2147
+[32m[0921 01:38:22 @group.py:42][0m Callbacks took 153.040 sec in total. InferenceRunner: 152.692sec
+[32m[0921 01:38:22 @base.py:228][0m Start Epoch 11 ...
+  0%|          |0/31682[00:00<?,?it/s] 44%|####3     |13819/31682[05:00<06:27,46.06it/s]           46%|####5     |14492/31682[05:10<06:13,46.06it/s] 86%|########6 |27335/31682[10:00<01:35,45.55it/s]           88%|########8 |27909/31682[10:10<01:22,45.55it/s]100%|##########|31682/31682[11:16<00:00,46.86it/s]
+[32m[0921 01:49:39 @base.py:238][0m Epoch 11 (global_step 348502) finished, time:676.05 sec.
+[32m[0921 01:49:39 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-348502.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[03:01<00:00,73.33it/s]
+[32m[0921 01:52:40 @monitor.py:359][0m QueueInput/queue_size: 3.0434
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_11-rms: 0.27757
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68643
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_15-rms: 0.27281
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.7246
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_19-rms: 0.26146
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.75771
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_3-rms: 0.41644
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.56376
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_7-rms: 0.23422
+[32m[0921 01:52:40 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67957
+[32m[0921 01:52:40 @monitor.py:359][0m cost: 0.86489
+[32m[0921 01:52:40 @monitor.py:359][0m cross_entropy_loss: 0.49804
+[32m[0921 01:52:40 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27138
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31954
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc2/W-rms: 0.31706
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30166
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27581
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27483
+[32m[0921 01:52:40 @monitor.py:359][0m param-summary/fct/W-rms: 0.44131
+[32m[0921 01:52:40 @monitor.py:359][0m regularize_cost_1: 0.36684
+[32m[0921 01:52:40 @monitor.py:359][0m train-error-top1: 0.15315
+[32m[0921 01:52:40 @monitor.py:359][0m val-error-top1: 0.25112
+[32m[0921 01:52:40 @monitor.py:359][0m val-utt-error: 0.020843
+[32m[0921 01:52:40 @monitor.py:359][0m validation_cost: 1.2381
+[32m[0921 01:52:40 @group.py:42][0m Callbacks took 181.595 sec in total. InferenceRunner: 181.258sec
+[32m[0921 01:52:40 @base.py:228][0m Start Epoch 12 ...
+  0%|          |0/31682[00:00<?,?it/s] 47%|####7     |15021/31682[05:00<05:32,50.07it/s]           49%|####9     |15676/31682[05:10<05:19,50.07it/s] 86%|########6 |27386/31682[10:00<01:35,45.21it/s]           88%|########7 |27806/31682[10:10<01:25,45.21it/s]100%|##########|31682/31682[11:54<00:00,44.35it/s]
+[32m[0921 02:04:35 @base.py:238][0m Epoch 12 (global_step 380184) finished, time:714.37 sec.
+[32m[0921 02:04:35 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-380184.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:59<00:00,74.10it/s]
+[32m[0921 02:07:34 @monitor.py:359][0m QueueInput/queue_size: 0.71737
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_11-rms: 0.2779
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68774
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_15-rms: 0.27259
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72615
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_19-rms: 0.25934
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.7627
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_3-rms: 0.41212
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.56615
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_7-rms: 0.2348
+[32m[0921 02:07:34 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.68007
+[32m[0921 02:07:34 @monitor.py:359][0m cost: 0.90773
+[32m[0921 02:07:34 @monitor.py:359][0m cross_entropy_loss: 0.53206
+[32m[0921 02:07:34 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27463
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32313
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc2/W-rms: 0.32064
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30518
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27957
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27862
+[32m[0921 02:07:34 @monitor.py:359][0m param-summary/fct/W-rms: 0.44177
+[32m[0921 02:07:34 @monitor.py:359][0m regularize_cost_1: 0.37567
+[32m[0921 02:07:34 @monitor.py:359][0m train-error-top1: 0.15781
+[32m[0921 02:07:34 @monitor.py:359][0m val-error-top1: 0.24309
+[32m[0921 02:07:34 @monitor.py:359][0m val-utt-error: 0.021219
+[32m[0921 02:07:34 @monitor.py:359][0m validation_cost: 1.2226
+[32m[0921 02:07:34 @group.py:42][0m Callbacks took 179.759 sec in total. InferenceRunner: 179.364sec
+[32m[0921 02:07:34 @base.py:228][0m Start Epoch 13 ...
+  0%|          |0/31682[00:00<?,?it/s] 64%|######3   |20253/31682[05:00<02:49,67.45it/s]           66%|######5   |20899/31682[05:10<02:39,67.45it/s]100%|##########|31682/31682[08:12<00:00,64.33it/s]
+[32m[0921 02:15:47 @base.py:238][0m Epoch 13 (global_step 411866) finished, time:492.53 sec.
+[32m[0921 02:15:47 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-411866.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:01<00:00,109.50it/s]
+[32m[0921 02:17:49 @monitor.py:359][0m QueueInput/queue_size: 20.965
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_11-rms: 0.28214
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68445
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_15-rms: 0.27261
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72712
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_19-rms: 0.25496
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.7682
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_3-rms: 0.41225
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.56721
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_7-rms: 0.23458
+[32m[0921 02:17:49 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.6804
+[32m[0921 02:17:49 @monitor.py:359][0m cost: 0.86693
+[32m[0921 02:17:49 @monitor.py:359][0m cross_entropy_loss: 0.51057
+[32m[0921 02:17:49 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc0/W-rms: 0.2663
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31579
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc2/W-rms: 0.31266
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29753
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27214
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fc5/W-rms: 0.27064
+[32m[0921 02:17:49 @monitor.py:359][0m param-summary/fct/W-rms: 0.4435
+[32m[0921 02:17:49 @monitor.py:359][0m regularize_cost_1: 0.35636
+[32m[0921 02:17:49 @monitor.py:359][0m train-error-top1: 0.15587
+[32m[0921 02:17:49 @monitor.py:359][0m val-error-top1: 0.24235
+[32m[0921 02:17:49 @monitor.py:359][0m val-utt-error: 0.017457
+[32m[0921 02:17:49 @monitor.py:359][0m validation_cost: 1.1948
+[32m[0921 02:17:49 @group.py:42][0m Callbacks took 121.720 sec in total. InferenceRunner: 121.386sec
+[32m[0921 02:17:49 @base.py:228][0m Start Epoch 14 ...
+  0%|          |0/31682[00:00<?,?it/s] 69%|######8   |21729/31682[05:00<02:17,72.43it/s]           71%|#######   |22384/31682[05:10<02:08,72.43it/s]100%|##########|31682/31682[07:38<00:00,69.14it/s]
+[32m[0921 02:25:27 @base.py:238][0m Epoch 14 (global_step 443548) finished, time:458.27 sec.
+[32m[0921 02:25:27 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-443548.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:08<00:00,103.06it/s]
+[32m[0921 02:27:36 @monitor.py:359][0m QueueInput/queue_size: 0.84935
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_11-rms: 0.28237
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68423
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_15-rms: 0.27241
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72577
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_19-rms: 0.2567
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.76773
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_3-rms: 0.4119
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.56751
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_7-rms: 0.2318
+[32m[0921 02:27:36 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.68134
+[32m[0921 02:27:36 @monitor.py:359][0m cost: 0.82174
+[32m[0921 02:27:36 @monitor.py:359][0m cross_entropy_loss: 0.47176
+[32m[0921 02:27:36 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc0/W-rms: 0.26361
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31241
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc2/W-rms: 0.3095
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29509
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27057
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26828
+[32m[0921 02:27:36 @monitor.py:359][0m param-summary/fct/W-rms: 0.4445
+[32m[0921 02:27:36 @monitor.py:359][0m regularize_cost_1: 0.34998
+[32m[0921 02:27:36 @monitor.py:359][0m train-error-top1: 0.14297
+[32m[0921 02:27:36 @monitor.py:359][0m val-error-top1: 0.24141
+[32m[0921 02:27:36 @monitor.py:359][0m val-utt-error: 0.01994
+[32m[0921 02:27:36 @monitor.py:359][0m validation_cost: 1.1918
+[32m[0921 02:27:36 @group.py:42][0m Callbacks took 129.379 sec in total. InferenceRunner: 128.964sec
+[32m[0921 02:27:36 @base.py:228][0m Start Epoch 15 ...
+  0%|          |0/31682[00:00<?,?it/s] 46%|####6     |14709/31682[05:00<05:46,49.03it/s]           48%|####7     |15187/31682[05:10<05:36,49.03it/s] 99%|#########9|31411/31682[10:00<00:05,52.14it/s]100%|##########|31682/31682[10:06<00:00,52.23it/s]
+[32m[0921 02:37:43 @base.py:238][0m Epoch 15 (global_step 475230) finished, time:606.59 sec.
+[32m[0921 02:37:43 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-475230.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:29<00:00,88.93it/s]
+[32m[0921 02:40:13 @monitor.py:359][0m QueueInput/queue_size: 1.7287
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_11-rms: 0.27684
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68879
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_15-rms: 0.27528
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72593
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_19-rms: 0.26428
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.75993
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_3-rms: 0.40916
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.57282
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_7-rms: 0.23494
+[32m[0921 02:40:13 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.68155
+[32m[0921 02:40:13 @monitor.py:359][0m cost: 0.83635
+[32m[0921 02:40:13 @monitor.py:359][0m cross_entropy_loss: 0.48278
+[32m[0921 02:40:13 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc0/W-rms: 0.26533
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc1/W-rms: 0.31359
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc2/W-rms: 0.31108
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29669
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc4/W-rms: 0.27186
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26974
+[32m[0921 02:40:13 @monitor.py:359][0m param-summary/fct/W-rms: 0.44338
+[32m[0921 02:40:13 @monitor.py:359][0m regularize_cost_1: 0.35357
+[32m[0921 02:40:13 @monitor.py:359][0m train-error-top1: 0.14519
+[32m[0921 02:40:13 @monitor.py:359][0m val-error-top1: 0.24604
+[32m[0921 02:40:13 @monitor.py:359][0m val-utt-error: 0.019338
+[32m[0921 02:40:13 @monitor.py:359][0m validation_cost: 1.2094
+[32m[0921 02:40:13 @group.py:42][0m Callbacks took 149.981 sec in total. InferenceRunner: 149.450sec
+[32m[0921 02:40:13 @base.py:228][0m Start Epoch 16 ...
+  0%|          |0/31682[00:00<?,?it/s] 46%|####5     |14447/31682[05:00<05:57,48.15it/s]           47%|####6     |14745/31682[05:10<05:51,48.15it/s] 86%|########5 |27095/31682[10:00<01:42,44.95it/s]           87%|########6 |27458/31682[10:10<01:33,44.95it/s]100%|##########|31682/31682[12:07<00:00,43.52it/s]
+[32m[0921 02:52:21 @base.py:238][0m Epoch 16 (global_step 506912) finished, time:727.94 sec.
+[32m[0921 02:52:21 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-506912.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:03<00:00,107.36it/s]
+[32m[0921 02:54:25 @monitor.py:359][0m QueueInput/queue_size: 0.90208
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_11-rms: 0.28057
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68665
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_15-rms: 0.27351
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.72705
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_19-rms: 0.25273
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.7725
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_3-rms: 0.40764
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.5747
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_7-rms: 0.23755
+[32m[0921 02:54:25 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67958
+[32m[0921 02:54:25 @monitor.py:359][0m cost: 0.86376
+[32m[0921 02:54:25 @monitor.py:359][0m cross_entropy_loss: 0.49111
+[32m[0921 02:54:25 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc0/W-rms: 0.27291
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc1/W-rms: 0.32106
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc2/W-rms: 0.3187
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc3/W-rms: 0.30463
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc4/W-rms: 0.28002
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fc5/W-rms: 0.2779
+[32m[0921 02:54:25 @monitor.py:359][0m param-summary/fct/W-rms: 0.44412
+[32m[0921 02:54:25 @monitor.py:359][0m regularize_cost_1: 0.37265
+[32m[0921 02:54:25 @monitor.py:359][0m train-error-top1: 0.14793
+[32m[0921 02:54:25 @monitor.py:359][0m val-error-top1: 0.24219
+[32m[0921 02:54:25 @monitor.py:359][0m val-utt-error: 0.017983
+[32m[0921 02:54:25 @monitor.py:359][0m validation_cost: 1.2193
+[32m[0921 02:54:25 @group.py:42][0m Callbacks took 124.373 sec in total. InferenceRunner: 123.808sec
+[32m[0921 02:54:25 @base.py:228][0m Start Epoch 17 ...
+  0%|          |0/31682[00:00<?,?it/s] 63%|######3   |19980/31682[05:00<02:55,66.60it/s]           65%|######5   |20706/31682[05:10<02:44,66.60it/s]100%|##########|31682/31682[08:13<00:00,64.17it/s]
+[32m[0921 03:02:39 @base.py:238][0m Epoch 17 (global_step 538594) finished, time:493.73 sec.
+[32m[0921 03:02:39 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-538594.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[02:01<00:00,109.12it/s]
+[32m[0921 03:04:41 @monitor.py:359][0m QueueInput/queue_size: 50
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_11-rms: 0.27867
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.68705
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_15-rms: 0.26992
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.73352
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_19-rms: 0.24808
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.78039
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_3-rms: 0.40716
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.57476
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_7-rms: 0.23656
+[32m[0921 03:04:41 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.67897
+[32m[0921 03:04:41 @monitor.py:359][0m cost: 0.65285
+[32m[0921 03:04:41 @monitor.py:359][0m cross_entropy_loss: 0.30996
+[32m[0921 03:04:41 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc0/W-rms: 0.25978
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc1/W-rms: 0.30973
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc2/W-rms: 0.30677
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29242
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc4/W-rms: 0.26789
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26546
+[32m[0921 03:04:41 @monitor.py:359][0m param-summary/fct/W-rms: 0.44685
+[32m[0921 03:04:41 @monitor.py:359][0m regularize_cost_1: 0.34289
+[32m[0921 03:04:41 @monitor.py:359][0m train-error-top1: 0.089288
+[32m[0921 03:04:41 @monitor.py:359][0m val-error-top1: 0.21733
+[32m[0921 03:04:41 @monitor.py:359][0m val-utt-error: 0.014673
+[32m[0921 03:04:41 @monitor.py:359][0m validation_cost: 1.1182
+[32m[0921 03:04:41 @group.py:42][0m Callbacks took 122.143 sec in total. InferenceRunner: 121.802sec
+[32m[0921 03:04:41 @base.py:228][0m Start Epoch 18 ...
+  0%|          |0/31682[00:00<?,?it/s] 66%|######5   |20902/31682[05:00<02:34,69.67it/s]           68%|######7   |21478/31682[05:10<02:26,69.67it/s]100%|##########|31682/31682[07:59<00:00,66.03it/s]
+[32m[0921 03:12:41 @base.py:238][0m Epoch 18 (global_step 570276) finished, time:479.85 sec.
+[32m[0921 03:12:41 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-570276.
+[32m[0921 03:12:42 @saver.py:159][0m Model with minimum 'val-error-top1' saved.
+  0%|          |0/13290[00:00<?,?it/s]100%|##########|13290/13290[01:53<00:00,117.22it/s]
+[32m[0921 03:14:36 @monitor.py:359][0m QueueInput/queue_size: 2.2511
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_11-rms: 0.27751
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_11-sparsity: 0.69024
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_15-rms: 0.26878
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_15-sparsity: 0.73324
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_19-rms: 0.25561
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_19-sparsity: 0.77138
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_3-rms: 0.40527
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_3-sparsity: 0.57647
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_7-rms: 0.23403
+[32m[0921 03:14:36 @monitor.py:359][0m activation-summary/div_7-sparsity: 0.68571
+[32m[0921 03:14:36 @monitor.py:359][0m cost: 0.80556
+[32m[0921 03:14:36 @monitor.py:359][0m cross_entropy_loss: 0.46566
+[32m[0921 03:14:36 @monitor.py:359][0m learning_rate: 0.001
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc0/W-rms: 0.25971
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc1/W-rms: 0.30755
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc2/W-rms: 0.30438
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc3/W-rms: 0.29067
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc4/W-rms: 0.2673
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fc5/W-rms: 0.26479
+[32m[0921 03:14:36 @monitor.py:359][0m param-summary/fct/W-rms: 0.44534
+[32m[0921 03:14:36 @monitor.py:359][0m regularize_cost_1: 0.3399
+[32m[0921 03:14:36 @monitor.py:359][0m train-error-top1: 0.13962
+[32m[0921 03:14:36 @monitor.py:359][0m val-error-top1: 0.2408
+[32m[0921 03:14:36 @monitor.py:359][0m val-utt-error: 0.018886
+[32m[0921 03:14:36 @monitor.py:359][0m validation_cost: 1.1816
+[32m[0921 03:14:36 @group.py:42][0m Callbacks took 115.027 sec in total. InferenceRunner: 113.390sec
+[32m[0921 03:14:36 @base.py:228][0m Start Epoch 19 ...
+  0%|          |0/31682[00:00<?,?it/s] 63%|######2   |19953/31682[05:00<02:56,66.51it/s]           65%|######5   |20706/31682[05:10<02:45,66.51it/s]100%|##########|31682/31682[07:41<00:00,68.69it/s]
+[32m[0921 03:22:17 @base.py:238][0m Epoch 19 (global_step 601958) finished, time:461.24 sec.
+[32m[0921 03:22:17 @saver.py:90][0m Model saved to ./train_logs_a30_w20/model-601958.
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Unable to create job step: Job/step already completing or completed
+srun: error: Timed out waiting for job step to complete
